@@ -3,6 +3,7 @@ package com.testvagrant.pages;
 import java.time.LocalDate;
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,8 +14,8 @@ import com.utilities.WaitForMilliSeconds;
 
 public class HotelBookingPage {
 
-	// @FindBy(linkText = "Hotels")
-	@FindBy(xpath = "//*[@href='/hotels' and @title='Hotels']")
+	
+	@FindBy(xpath = "//*[@id='Home']//li/descendant::a[@href='/hotels']")
 	public WebElement hotelLink;
 
 	@FindBy(id = "Tags")
@@ -38,8 +39,10 @@ public class HotelBookingPage {
 	
 	public void shouldBeAbleToSearchForHotels() {
 
-//		hotelLink.click();
-
+		
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].click();", hotelLink);
+		
 		localityTextBox.sendKeys("Indiranagar, Bangalore");
 		waitFor.waitForMilliSeconds(2000);
 		List<WebElement> hotels = driver.findElements(By.xpath("//*[@id='ui-id-1']/li/a"));

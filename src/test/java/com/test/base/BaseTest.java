@@ -19,7 +19,7 @@ public class BaseTest {
 	public static Properties properties = new Properties();
 	public static FileInputStream fis;
 	public String TestCaseName;
-	SoftAssert s_assert = new SoftAssert();
+	
 	
 	@BeforeSuite
 	public void setUp() throws InterruptedException {
@@ -63,8 +63,7 @@ public class BaseTest {
 
 		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
-		// driver.navigate().to(properties.getProperty("baseURL"));
-		driver.navigate().to(properties.getProperty("baseURLhotels"));
+		driver.navigate().to(properties.getProperty("baseURL"));
 		Thread.sleep(8000);
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 		// driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
