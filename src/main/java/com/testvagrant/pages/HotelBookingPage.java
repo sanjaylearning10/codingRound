@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Reporter;
 
 import com.utilities.WaitForMilliSeconds;
 
@@ -40,50 +41,54 @@ public class HotelBookingPage {
 	public void shouldBeAbleToSearchForHotels() {
 
 		
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].click();", hotelLink);
-		
-		localityTextBox.sendKeys("Indiranagar, Bangalore");
-		waitFor.waitForMilliSeconds(2000);
-		List<WebElement> hotels = driver.findElements(By.xpath("//*[@id='ui-id-1']/li/a"));
+		try {
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			js.executeScript("arguments[0].click();", hotelLink);
+			
+			localityTextBox.sendKeys("Indiranagar, Bangalore");
+			waitFor.waitForMilliSeconds(2000);
+			List<WebElement> hotels = driver.findElements(By.xpath("//*[@id='ui-id-1']/li/a"));
 
-		for (int j = 0; j < hotels.size(); j++) {
-			if (hotels.get(j).getText().contains("Indiranagar, Bangalore, Karnataka, India")) {
-				hotels.get(j).click();
+			for (int j = 0; j < hotels.size(); j++) {
+				if (hotels.get(j).getText().contains("Indiranagar, Bangalore, Karnataka, India")) {
+					hotels.get(j).click();
+				}
 			}
-		}
 
-		LocalDate date = LocalDate.now();
-		LocalDate checkinDate = date.plusDays(1);
-		String[] stringCheckinDate = checkinDate.toString().split("-");
+			LocalDate date = LocalDate.now();
+			LocalDate checkinDate = date.plusDays(1);
+			String[] stringCheckinDate = checkinDate.toString().split("-");
 
-		waitFor.waitForMilliSeconds(2000);
-		List<WebElement> FromDateOptions = driver.findElements(By.xpath("//*[@id='ui-datepicker-div']//tbody/tr/td/a"));
+			waitFor.waitForMilliSeconds(2000);
+			List<WebElement> FromDateOptions = driver.findElements(By.xpath("//*[@id='ui-datepicker-div']//tbody/tr/td/a"));
 
-		for (int k = 0; k < FromDateOptions.size(); k++) {
-			if (FromDateOptions.get(k).getText().toString().equals(stringCheckinDate[2])) {
+			for (int k = 0; k < FromDateOptions.size(); k++) {
+				if (FromDateOptions.get(k).getText().toString().equals(stringCheckinDate[2])) {
 
-				FromDateOptions.get(k).click();
-				break;
+					FromDateOptions.get(k).click();
+					break;
+				}
 			}
-		}
 
-		waitFor.waitForMilliSeconds(2000);
-		LocalDate checkOutDate = date.plusDays(7);
-		String[] stringCheckoutDate = checkOutDate.toString().split("-");
+			waitFor.waitForMilliSeconds(2000);
+			LocalDate checkOutDate = date.plusDays(7);
+			String[] stringCheckoutDate = checkOutDate.toString().split("-");
 
-		List<WebElement> ToDateOptions = driver.findElements(By.xpath("//*[@id='ui-datepicker-div']//tbody/tr/td/a"));
+			List<WebElement> ToDateOptions = driver.findElements(By.xpath("//*[@id='ui-datepicker-div']//tbody/tr/td/a"));
 
-		for (int k = 0; k < ToDateOptions.size(); k++) {
-			if (ToDateOptions.get(k).getText().toString().equals(stringCheckoutDate[2])) {
+			for (int k = 0; k < ToDateOptions.size(); k++) {
+				if (ToDateOptions.get(k).getText().toString().equals(stringCheckoutDate[2])) {
 
-				ToDateOptions.get(k).click();
-				break;
+					ToDateOptions.get(k).click();
+					break;
+				}
 			}
-		}
 
-		new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
-		searchButton.click();
+			new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
+			searchButton.click();
+		} catch (Exception e) {
+			Reporter.log(e.getMessage());
+		}
 
 	}
 

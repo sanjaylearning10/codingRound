@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Reporter;
 
 import com.utilities.WaitForMilliSeconds;
 
@@ -40,53 +41,59 @@ public class FlightBookingPage {
 
 	public void flightBooking() {
 
-		OneWay.click();
+		try {
+			OneWay.click();
 
-		FromTag.clear();
-		FromTag.sendKeys("Bangalore");
+			FromTag.clear();
+			FromTag.sendKeys("Bangalore");
 
-		List<WebElement> originOptions = driver.findElements(By.xpath("//*[@id='ui-id-1']/li/a"));
+			List<WebElement> originOptions = driver.findElements(By.xpath("//*[@id='ui-id-1']/li/a"));
 
-		// wait for the auto complete options to appear for the origin
-		waitFor.waitForMilliSeconds(2000);
+			// wait for the auto complete options to appear for the origin
+			waitFor.waitForMilliSeconds(2000);
 
-		for (int i = 0; i < originOptions.size(); i++) {
-			if (originOptions.get(i).getText().contains("Bangalore")) {
-				originOptions.get(i).click();
+			for (int i = 0; i < originOptions.size(); i++) {
+				if (originOptions.get(i).getText().contains("Bangalore")) {
+					originOptions.get(i).click();
+				}
 			}
-		}
 
-		destinationTag.clear();
-		destinationTag.sendKeys("Delhi");
-		List<WebElement> destinationOptions = driver.findElements(By.xpath("//*[@id='ui-id-2']/li/a"));
-		waitFor.waitForMilliSeconds(2000);
-		for (int j = 0; j < destinationOptions.size(); j++) {
-			if (destinationOptions.get(j).getText().contains("Delhi")) {
-				destinationOptions.get(j).click();
+			destinationTag.clear();
+			destinationTag.sendKeys("Delhi");
+			List<WebElement> destinationOptions = driver.findElements(By.xpath("//*[@id='ui-id-2']/li/a"));
+			waitFor.waitForMilliSeconds(2000);
+			for (int j = 0; j < destinationOptions.size(); j++) {
+				if (destinationOptions.get(j).getText().contains("Delhi")) {
+					destinationOptions.get(j).click();
+				}
 			}
+
+			// wait for the auto complete options to appear for the destination
+			// select the first item from the destination auto complete list
+
+			LocalDate date = LocalDate.now();
+			LocalDate tomorrowDate = date.plusDays(1);
+			
+			String[] stringDate = tomorrowDate.toString().split("-");
+
+			waitFor.waitForMilliSeconds(2000);
+			List<WebElement> calendarOptions = driver
+					.findElements(By.xpath("//*[@id='ui-datepicker-div']//tbody/descendant::tr/td/a"));
+
+			for (int k = 0; k < calendarOptions.size(); k++) {
+				if (calendarOptions.get(k).getText().toString().equals(stringDate[2])) {
+					calendarOptions.get(k).click();
+					break;
+				}
+			}
+
+			SearchBtn.click();
+			waitFor.waitForMilliSeconds(2000);
+		} catch (Exception e) {
+			Reporter.log(e.getMessage());
 		}
-
-		// wait for the auto complete options to appear for the destination
-		// select the first item from the destination auto complete list
-
-		LocalDate date = LocalDate.now();
-		LocalDate tomorrowDate = date.plusDays(1);
 		
-		String[] stringDate = tomorrowDate.toString().split("-");
-
-		waitFor.waitForMilliSeconds(2000);
-		List<WebElement> calendarOptions = driver
-				.findElements(By.xpath("//*[@id='ui-datepicker-div']//tbody/descendant::tr/td/a"));
-
-		for (int k = 0; k < calendarOptions.size(); k++) {
-			if (calendarOptions.get(k).getText().toString().equals(stringDate[2])) {
-				calendarOptions.get(k).click();
-				break;
-			}
-		}
-
-		SearchBtn.click();
-		waitFor.waitForMilliSeconds(2000);
+		
 		
 	}
 

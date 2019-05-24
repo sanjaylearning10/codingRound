@@ -15,6 +15,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.Test;
 
 public class SignInPage {
@@ -42,13 +43,17 @@ public class SignInPage {
 
 	public String shouldThrowAnErrorIfSignInDetailsAreMissing() {
 
-		Youtrips.click();
-		SignIn.click();
+		try {
+			Youtrips.click();
+			SignIn.click();
 
-		driver.switchTo().frame("modal_window");
-		waitFor.waitForMilliSeconds(2000);
-		signInButton.click();
-		waitFor.waitForMilliSeconds(2000);
+			driver.switchTo().frame("modal_window");
+			waitFor.waitForMilliSeconds(2000);
+			signInButton.click();
+			waitFor.waitForMilliSeconds(2000);
+		} catch (Exception e) {
+			Reporter.log(e.getMessage());
+		}
 		String errorMessageText = errorMessage.getText();
 		System.out.println("The error message is " + errorMessageText);
 
